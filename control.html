@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Model Car Controller</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .d-pad-container {
+            display: flex;
+            align-items: center;
+        }
+        .d-pad {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 120px;
+        }
+        .d-pad .row {
+            display: flex;
+            justify-content: center;
+        }
+        .d-pad button {
+            margin: 5px;
+            width: 80px;
+            height: 80px;
+            font-size: 24px;
+        }
+        .power-btn {
+            margin-left: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-pad-container">
+        <div class="d-pad">
+            <div class="row">
+                <button onclick="sendControl('forward')" class="btn btn-success"><i class="fas fa-arrow-up"></i></button>
+            </div>
+            <div class="row">
+                <button onclick="sendControl('left')" class="btn btn-warning"><i class="fas fa-arrow-left"></i></button>
+                <button onclick="sendControl('right')" class="btn btn-warning"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="row">
+                <button onclick="sendControl('backward')" class="btn btn-danger"><i class="fas fa-arrow-down"></i></button>
+            </div>
+        </div>
+        <div class="power-btn">
+            <button id="powerButton" class="btn btn-primary" onclick="togglePower()">Power <i class="fas fa-power-off"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <script>
+        let socket = io();
+
+        function sendControl(command) {
+            console.log("Command sent: " + command);
+            socket.emit('control', command);
+        }
+
+        let powerStatus = false;
+
+        function togglePower() {
+            powerStatus = !powerStatus;
+            const powerButton = document.getElementById('powerButton');
+            if (powerStatus) {
+                powerButton.classList.remove('btn-danger');
+                powerButton.classList.add('btn-success');
+            } else {
+                powerButton.classList.remove('btn-success');
+                powerButton.classList.add('btn-danger');
+            }
+        }
+    </script>
+</body>
+</html>
+
